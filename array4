@@ -1,0 +1,1000 @@
+    ///
+    /// - Parameter n: The number of elements to remove. `n` must be greater than
+    ///   or equal to zero, and must be less than or equal to the number of
+    ///   elements in the collection.
+    ///
+    /// - Complexity: O(1) if the collection conforms to
+    ///   `RandomAccessCollection`; otherwise, O(*n*).
+    public mutating func removeFirst(_ n: Int)
+
+    /// The last element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    ///
+    ///     let numbers = [10, 20, 30, 40, 50]
+    ///     if let lastNumber = numbers.last {
+    ///         print(lastNumber)
+    ///     }
+    ///     // Prints "50"
+    public var last: Element? { get }
+
+    /// Returns the first index in which an element of the collection satisfies
+    /// the given predicate.
+    ///
+    /// You can use the predicate to find an element of a type that doesn't
+    /// conform to the `Equatable` protocol or to find an element that matches
+    /// particular criteria. Here's an example that finds a student name that
+    /// begins with the letter "A":
+    ///
+    ///     let students = ["Kofi", "Abena", "Peter", "Kweku", "Akosua"]
+    ///     if let i = students.index(where: { $0.hasPrefix("A") }) {
+    ///         print("\(students[i]) starts with 'A'!")
+    ///     }
+    ///     // Prints "Abena starts with 'A'!"
+    ///
+    /// - Parameter predicate: A closure that takes an element as its argument
+    ///   and returns a Boolean value that indicates whether the passed element
+    ///   represents a match.
+    /// - Returns: The index of the first element for which `predicate` returns
+    ///   `true`. If no elements in the collection satisfy the given predicate,
+    ///   returns `nil`.
+    ///
+    /// - SeeAlso: `index(of:)`
+    public func index(where predicate: (Element) throws -> Bool) rethrows -> Int?
+
+    public mutating func partition(by belongsInSecondPartition: (Element) throws -> Bool) rethrows -> Int
+
+    public mutating func partition(by belongsInSecondPartition: (Element) throws -> Bool) rethrows -> Int
+
+    /// Returns the elements of the collection, sorted using the given
+    /// predicate as the comparison between elements.
+    ///
+    /// When you want to sort a collection of elements that don't conform to
+    /// the `Comparable` protocol, pass a predicate to this method that returns
+    /// `true` when the first element passed should be ordered before the
+    /// second. The elements of the resulting array are ordered according to the
+    /// given predicate.
+    ///
+    /// The predicate must be a *strict weak ordering* over the elements. That
+    /// is, for any elements `a`, `b`, and `c`, the following conditions must
+    /// hold:
+    ///
+    /// - `areInIncreasingOrder(a, a)` is always `false`. (Irreflexivity)
+    /// - If `areInIncreasingOrder(a, b)` and `areInIncreasingOrder(b, c)` are
+    ///   both `true`, then `areInIncreasingOrder(a, c)` is also `true`.
+    ///   (Transitive comparability)
+    /// - Two elements are *incomparable* if neither is ordered before the other
+    ///   according to the predicate. If `a` and `b` are incomparable, and `b`
+    ///   and `c` are incomparable, then `a` and `c` are also incomparable.
+    ///   (Transitive incomparability)
+    ///
+    /// The sorting algorithm is not stable. A nonstable sort may change the
+    /// relative order of elements for which `areInIncreasingOrder` does not
+    /// establish an order.
+    ///
+    /// In the following example, the predicate provides an ordering for an array
+    /// of a custom `HTTPResponse` type. The predicate orders errors before
+    /// successes and sorts the error responses by their error code.
+    ///
+    ///     enum HTTPResponse {
+    ///         case ok
+    ///         case error(Int)
+    ///     }
+    ///
+    ///     let responses: [HTTPResponse] = [.error(500), .ok, .ok, .error(404), .error(403)]
+    ///     let sortedResponses = responses.sorted {
+    ///         switch ($0, $1) {
+    ///         // Order errors by code
+    ///         case let (.error(aCode), .error(bCode)):
+    ///             return aCode < bCode
+    ///
+    ///         // All successes are equivalent, so none is before any other
+    ///         case (.ok, .ok): return false
+    ///
+    ///         // Order errors before successes
+    ///         case (.error, .ok): return true
+    ///         case (.ok, .error): return false
+    ///         }
+    ///     }
+    ///     print(sortedResponses)
+    ///     // Prints "[.error(403), .error(404), .error(500), .ok, .ok]"
+    ///
+    /// You also use this method to sort elements that conform to the
+    /// `Comparable` protocol in descending order. To sort your collection
+    /// in descending order, pass the greater-than operator (`>`) as the
+    /// `areInIncreasingOrder` parameter.
+    ///
+    ///     let students: Set = ["Kofi", "Abena", "Peter", "Kweku", "Akosua"]
+    ///     let descendingStudents = students.sorted(by: >)
+    ///     print(descendingStudents)
+    ///     // Prints "["Peter", "Kweku", "Kofi", "Akosua", "Abena"]"
+    ///
+    /// Calling the related `sorted()` method is equivalent to calling this
+    /// method and passing the less-than operator (`<`) as the predicate.
+    ///
+    ///     print(students.sorted())
+    ///     // Prints "["Abena", "Akosua", "Kofi", "Kweku", "Peter"]"
+    ///     print(students.sorted(by: <))
+    ///     // Prints "["Abena", "Akosua", "Kofi", "Kweku", "Peter"]"
+    ///
+    /// - Parameter areInIncreasingOrder: A predicate that returns `true` if its first
+    ///   argument should be ordered before its second argument; otherwise,
+    ///   `false`.
+    /// - Returns: A sorted array of the collection's elements.
+    ///
+    /// - SeeAlso: `sorted()`
+    /// - MutatingVariant: sort
+    public func sorted(by areInIncreasingOrder: (Element, Element) -> Bool) -> [Element]
+
+    /// Sorts the collection in place, using the given predicate as the
+    /// comparison between elements.
+    ///
+    /// When you want to sort a collection of elements that doesn't conform to
+    /// the `Comparable` protocol, pass a closure to this method that returns
+    /// `true` when the first element passed should be ordered before the
+    /// second.
+    ///
+    /// The predicate must be a *strict weak ordering* over the elements. That
+    /// is, for any elements `a`, `b`, and `c`, the following conditions must
+    /// hold:
+    ///
+    /// - `areInIncreasingOrder(a, a)` is always `false`. (Irreflexivity)
+    /// - If `areInIncreasingOrder(a, b)` and `areInIncreasingOrder(b, c)` are
+    ///   both `true`, then `areInIncreasingOrder(a, c)` is also `true`.
+    ///   (Transitive comparability)
+    /// - Two elements are *incomparable* if neither is ordered before the other
+    ///   according to the predicate. If `a` and `b` are incomparable, and `b`
+    ///   and `c` are incomparable, then `a` and `c` are also incomparable.
+    ///   (Transitive incomparability)
+    ///
+    /// The sorting algorithm is not stable. A nonstable sort may change the
+    /// relative order of elements for which `areInIncreasingOrder` does not
+    /// establish an order.
+    ///
+    /// In the following example, the closure provides an ordering for an array
+    /// of a custom enumeration that describes an HTTP response. The predicate
+    /// orders errors before successes and sorts the error responses by their
+    /// error code.
+    ///
+    ///     enum HTTPResponse {
+    ///         case ok
+    ///         case error(Int)
+    ///     }
+    ///
+    ///     var responses: [HTTPResponse] = [.error(500), .ok, .ok, .error(404), .error(403)]
+    ///     responses.sort {
+    ///         switch ($0, $1) {
+    ///         // Order errors by code
+    ///         case let (.error(aCode), .error(bCode)):
+    ///             return aCode < bCode
+    ///
+    ///         // All successes are equivalent, so none is before any other
+    ///         case (.ok, .ok): return false
+    ///
+    ///         // Order errors before successes
+    ///         case (.error, .ok): return true
+    ///         case (.ok, .error): return false
+    ///         }
+    ///     }
+    ///     print(responses)
+    ///     // Prints "[.error(403), .error(404), .error(500), .ok, .ok]"
+    ///
+    /// Alternatively, use this method to sort a collection of elements that do
+    /// conform to `Comparable` when you want the sort to be descending instead
+    /// of ascending. Pass the greater-than operator (`>`) operator as the
+    /// predicate.
+    ///
+    ///     var students = ["Kofi", "Abena", "Peter", "Kweku", "Akosua"]
+    ///     students.sort(by: >)
+    ///     print(students)
+    ///     // Prints "["Peter", "Kweku", "Kofi", "Akosua", "Abena"]"
+    ///
+    /// - Parameter areInIncreasingOrder: A predicate that returns `true` if its first
+    ///   argument should be ordered before its second argument; otherwise,
+    ///   `false`.
+    public mutating func sort(by areInIncreasingOrder: (Element, Element) -> Bool)
+
+    /// The indices that are valid for subscripting the collection, in ascending
+    /// order.
+    ///
+    /// A collection's `indices` property can hold a strong reference to the
+    /// collection itself, causing the collection to be non-uniquely referenced.
+    /// If you mutate the collection while iterating over its indices, a strong
+    /// reference can cause an unexpected copy of the collection. To avoid the
+    /// unexpected copy, use the `index(after:)` method starting with
+    /// `startIndex` to produce indices instead.
+    ///
+    ///     var c = MyFancyCollection([10, 20, 30, 40, 50])
+    ///     var i = c.startIndex
+    ///     while i != c.endIndex {
+    ///         c[i] /= 5
+    ///         i = c.index(after: i)
+    ///     }
+    ///     // c == MyFancyCollection([2, 4, 6, 8, 10])
+    public var indices: DefaultRandomAccessIndices<ArraySlice<Element>> { get }
+
+    /// A sequence containing the same elements as this sequence,
+    /// but on which some operations, such as `map` and `filter`, are
+    /// implemented lazily.
+    ///
+    /// - SeeAlso: `LazySequenceProtocol`, `LazySequence`
+    public var lazy: LazySequence<ArraySlice<Element>> { get }
+
+    /// Accesses a contiguous subrange of the collection's elements.
+    ///
+    /// The accessed slice uses the same indices for the same elements as the
+    /// original collection. Always use the slice's `startIndex` property
+    /// instead of assuming that its indices start at a particular value.
+    ///
+    /// This example demonstrates getting a slice of an array of strings, finding
+    /// the index of one of the strings in the slice, and then using that index
+    /// in the original array.
+    ///
+    ///     let streets = ["Adams", "Bryant", "Channing", "Douglas", "Evarts"]
+    ///     let streetsSlice = streets[2 ..< streets.endIndex]
+    ///     print(streetsSlice)
+    ///     // Prints "["Channing", "Douglas", "Evarts"]"
+    ///
+    ///     let index = streetsSlice.index(of: "Evarts")    // 4
+    ///     streets[index!] = "Eustace"
+    ///     print(streets[index!])
+    ///     // Prints "Eustace"
+    ///
+    /// - Parameter bounds: A range of the collection's indices. The bounds of
+    ///   the range must be valid indices of the collection.
+    public subscript(bounds: Range<Int>) -> MutableSlice<ArraySlice<Element>>
+
+    public subscript(bounds: Range<Int>) -> MutableBidirectionalSlice<ArraySlice<Element>>
+
+    public subscript(bounds: Range<Int>) -> MutableRandomAccessSlice<ArraySlice<Element>>
+
+    /// The indices that are valid for subscripting the collection, in ascending
+    /// order.
+    public var indices: CountableRange<Int> { get }
+
+    /// Returns a view presenting the elements of the collection in reverse
+    /// order.
+    ///
+    /// You can reverse a collection without allocating new space for its
+    /// elements by calling this `reversed()` method. A
+    /// `ReversedRandomAccessCollection` instance wraps an underlying collection
+    /// and provides access to its elements in reverse order. This example
+    /// prints the elements of an array in reverse order:
+    ///
+    ///     let numbers = [3, 5, 7]
+    ///     for number in numbers.reversed() {
+    ///         print(number)
+    ///     }
+    ///     // Prints "7"
+    ///     // Prints "5"
+    ///     // Prints "3"
+    ///
+    /// If you need a reversed collection of the same type, you may be able to
+    /// use the collection's sequence-based or collection-based initializer. For
+    /// example, to get the reversed version of an array, initialize a new
+    /// `Array` instance from the result of this `reversed()` method.
+    ///
+    ///     let reversedNumbers = Array(numbers.reversed())
+    ///     print(reversedNumbers)
+    ///     // Prints "[7, 5, 3]"
+    ///
+    /// - Complexity: O(1)
+    public func reversed() -> ReversedRandomAccessCollection<ArraySlice<Element>>
+
+    /// Returns an array containing the results of mapping the given closure
+    /// over the sequence's elements.
+    ///
+    /// In this example, `map` is used first to convert the names in the array
+    /// to lowercase strings and then to count their characters.
+    ///
+    ///     let cast = ["Vivien", "Marlon", "Kim", "Karl"]
+    ///     let lowercaseNames = cast.map { $0.lowercaseString }
+    ///     // 'lowercaseNames' == ["vivien", "marlon", "kim", "karl"]
+    ///     let letterCounts = cast.map { $0.characters.count }
+    ///     // 'letterCounts' == [6, 6, 3, 4]
+    ///
+    /// - Parameter transform: A mapping closure. `transform` accepts an
+    ///   element of this sequence as its parameter and returns a transformed
+    ///   value of the same or of a different type.
+    /// - Returns: An array containing the transformed elements of this
+    ///   sequence.
+    public func map<T>(_ transform: (Element) throws -> T) rethrows -> [T]
+
+    /// Returns an array containing, in order, the elements of the sequence
+    /// that satisfy the given predicate.
+    ///
+    /// In this example, `filter` is used to include only names shorter than
+    /// five characters.
+    ///
+    ///     let cast = ["Vivien", "Marlon", "Kim", "Karl"]
+    ///     let shortNames = cast.filter { $0.characters.count < 5 }
+    ///     print(shortNames)
+    ///     // Prints "["Kim", "Karl"]"
+    ///
+    /// - Parameter isIncluded: A closure that takes an element of the
+    ///   sequence as its argument and returns a Boolean value indicating
+    ///   whether the element should be included in the returned array.
+    /// - Returns: An array of the elements that `includeElement` allowed.
+    public func filter(_ isIncluded: (Element) throws -> Bool) rethrows -> [Element]
+
+    /// Returns a value less than or equal to the number of elements in
+    /// the sequence, nondestructively.
+    ///
+    /// - Complexity: O(*n*)
+    public var underestimatedCount: Int { get }
+
+    /// Calls the given closure on each element in the sequence in the same order
+    /// as a `for`-`in` loop.
+    ///
+    /// The two loops in the following example produce the same output:
+    ///
+    ///     let numberWords = ["one", "two", "three"]
+    ///     for word in numberWords {
+    ///         print(word)
+    ///     }
+    ///     // Prints "one"
+    ///     // Prints "two"
+    ///     // Prints "three"
+    ///
+    ///     numberWords.forEach { word in
+    ///         print(word)
+    ///     }
+    ///     // Same as above
+    ///
+    /// Using the `forEach` method is distinct from a `for`-`in` loop in two
+    /// important ways:
+    ///
+    /// 1. You cannot use a `break` or `continue` statement to exit the current
+    ///    call of the `body` closure or skip subsequent calls.
+    /// 2. Using the `return` statement in the `body` closure will exit only from
+    ///    the current call to `body`, not from any outer scope, and won't skip
+    ///    subsequent calls.
+    ///
+    /// - Parameter body: A closure that takes an element of the sequence as a
+    ///   parameter.
+    public func forEach(_ body: (Element) throws -> Void) rethrows
+
+    /// Returns the first element of the sequence that satisfies the given
+    /// predicate.
+    ///
+    /// The following example uses the `first(where:)` method to find the first
+    /// negative number in an array of integers:
+    ///
+    ///     let numbers = [3, 7, 4, -2, 9, -6, 10, 1]
+    ///     if let firstNegative = numbers.first(where: { $0 < 0 }) {
+    ///         print("The first negative number is \(firstNegative).")
+    ///     }
+    ///     // Prints "The first negative number is -2."
+    ///
+    /// - Parameter predicate: A closure that takes an element of the sequence as
+    ///   its argument and returns a Boolean value indicating whether the
+    ///   element is a match.
+    /// - Returns: The first element of the sequence that satisfies `predicate`,
+    ///   or `nil` if there is no element that satisfies `predicate`.
+    public func first(where predicate: (Element) throws -> Bool) rethrows -> Element?
+
+    /// Returns a subsequence containing all but the first element of the
+    /// sequence.
+    ///
+    /// The following example drops the first element from an array of integers.
+    ///
+    ///     let numbers = [1, 2, 3, 4, 5]
+    ///     print(numbers.dropFirst())
+    ///     // Prints "[2, 3, 4, 5]"
+    ///
+    /// If the sequence has no elements, the result is an empty subsequence.
+    ///
+    ///     let empty: [Int] = []
+    ///     print(empty.dropFirst())
+    ///     // Prints "[]"
+    ///
+    /// - Returns: A subsequence starting after the first element of the
+    ///   sequence.
+    ///
+    /// - Complexity: O(1)
+    public func dropFirst() -> ArraySlice<Element>
+
+    /// Returns a subsequence containing all but the last element of the
+    /// sequence.
+    ///
+    /// The sequence must be finite. 
+    ///
+    ///     let numbers = [1, 2, 3, 4, 5]
+    ///     print(numbers.dropLast())
+    ///     // Prints "[1, 2, 3, 4]"
+    ///
+    /// If the sequence has no elements, the result is an empty subsequence.
+    ///
+    ///     let empty: [Int] = []
+    ///     print(empty.dropLast())
+    ///     // Prints "[]"
+    ///
+    /// - Returns: A subsequence leaving off the last element of the sequence.
+    ///
+    /// - Complexity: O(*n*), where *n* is the length of the sequence.
+    public func dropLast() -> ArraySlice<Element>
+
+    /// Returns a sequence of pairs (*n*, *x*), where *n* represents a
+    /// consecutive integer starting at zero, and *x* represents an element of
+    /// the sequence.
+    ///
+    /// This example enumerates the characters of the string "Swift" and prints
+    /// each character along with its place in the string.
+    ///
+    ///     for (n, c) in "Swift".characters.enumerated() {
+    ///         print("\(n): '\(c)'")
+    ///     }
+    ///     // Prints "0: 'S'"
+    ///     // Prints "1: 'w'"
+    ///     // Prints "2: 'i'"
+    ///     // Prints "3: 'f'"
+    ///     // Prints "4: 't'"
+    ///
+    /// When enumerating a collection, the integer part of each pair is a counter
+    /// for the enumeration, not necessarily the index of the paired value.
+    /// These counters can only be used as indices in instances of zero-based,
+    /// integer-indexed collections, such as `Array` and `ContiguousArray`. For
+    /// other collections the counters may be out of range or of the wrong type
+    /// to use as an index. To iterate over the elements of a collection with its
+    /// indices, use the `zip(_:_:)` function.
+    ///
+    /// This example iterates over the indices and elements of a set, building a
+    /// list of indices of names with five or fewer letters.
+    ///
+    ///     let names: Set = ["Sofia", "Camilla", "Martina", "Mateo", "Nicolás"]
+    ///     var shorterIndices: [SetIndex<String>] = []
+    ///     for (i, name) in zip(names.indices, names) {
+    ///         if name.characters.count <= 5 {
+    ///             shorterIndices.append(i)
+    ///         }
+    ///     }
+    ///
+    /// Now that the `shorterIndices` array holds the indices of the shorter
+    /// names in the `names` set, you can use those indices to access elements in
+    /// the set.
+    ///
+    ///     for i in shorterIndices {
+    ///         print(names[i])
+    ///     }
+    ///     // Prints "Sofia"
+    ///     // Prints "Mateo"
+    ///
+    /// - Returns: A sequence of pairs enumerating the sequence.
+    public func enumerated() -> EnumeratedSequence<ArraySlice<Element>>
+
+    /// Returns the minimum element in the sequence, using the given predicate as
+    /// the comparison between elements.
+    ///
+    /// The predicate must be a *strict weak ordering* over the elements. That
+    /// is, for any elements `a`, `b`, and `c`, the following conditions must
+    /// hold:
+    ///
+    /// - `areInIncreasingOrder(a, a)` is always `false`. (Irreflexivity)
+    /// - If `areInIncreasingOrder(a, b)` and `areInIncreasingOrder(b, c)` are
+    ///   both `true`, then `areInIncreasingOrder(a, c)` is also
+    ///   `true`. (Transitive comparability)
+    /// - Two elements are *incomparable* if neither is ordered before the other
+    ///   according to the predicate. If `a` and `b` are incomparable, and `b`
+    ///   and `c` are incomparable, then `a` and `c` are also incomparable.
+    ///   (Transitive incomparability)
+    ///
+    /// This example shows how to use the `min(by:)` method on a
+    /// dictionary to find the key-value pair with the lowest value.
+    ///
+    ///     let hues = ["Heliotrope": 296, "Coral": 16, "Aquamarine": 156]
+    ///     let leastHue = hues.min { a, b in a.value < b.value }
+    ///     print(leastHue)
+    ///     // Prints "Optional(("Coral", 16))"
+    ///
+    /// - Parameter areInIncreasingOrder: A predicate that returns `true`
+    ///   if its first argument should be ordered before its second
+    ///   argument; otherwise, `false`.
+    /// - Returns: The sequence's minimum element, according to
+    ///   `areInIncreasingOrder`. If the sequence has no elements, returns
+    ///   `nil`.
+    ///
+    /// - SeeAlso: `min()`
+    @warn_unqualified_access
+    public func min(by areInIncreasingOrder: (Element, Element) throws -> Bool) rethrows -> Element?
+
+    /// Returns the maximum element in the sequence, using the given predicate
+    /// as the comparison between elements.
+    ///
+    /// The predicate must be a *strict weak ordering* over the elements. That
+    /// is, for any elements `a`, `b`, and `c`, the following conditions must
+    /// hold:
+    ///
+    /// - `areInIncreasingOrder(a, a)` is always `false`. (Irreflexivity)
+    /// - If `areInIncreasingOrder(a, b)` and `areInIncreasingOrder(b, c)` are
+    ///   both `true`, then `areInIncreasingOrder(a, c)` is also
+    ///   `true`. (Transitive comparability)
+    /// - Two elements are *incomparable* if neither is ordered before the other
+    ///   according to the predicate. If `a` and `b` are incomparable, and `b`
+    ///   and `c` are incomparable, then `a` and `c` are also incomparable.
+    ///   (Transitive incomparability)
+    ///
+    /// This example shows how to use the `max(by:)` method on a
+    /// dictionary to find the key-value pair with the highest value.
+    ///
+    ///     let hues = ["Heliotrope": 296, "Coral": 16, "Aquamarine": 156]
+    ///     let greatestHue = hues.max { a, b in a.value < b.value }
+    ///     print(greatestHue)
+    ///     // Prints "Optional(("Heliotrope", 296))"
+    ///
+    /// - Parameter areInIncreasingOrder:  A predicate that returns `true` if its
+    ///   first argument should be ordered before its second argument;
+    ///   otherwise, `false`.
+    /// - Returns: The sequence's maximum element if the sequence is not empty;
+    ///   otherwise, `nil`.
+    ///
+    /// - SeeAlso: `max()`
+    @warn_unqualified_access
+    public func max(by areInIncreasingOrder: (Element, Element) throws -> Bool) rethrows -> Element?
+
+    /// Returns a Boolean value indicating whether the initial elements of the
+    /// sequence are equivalent to the elements in another sequence, using
+    /// the given predicate as the equivalence test.
+    ///
+    /// The predicate must be a *equivalence relation* over the elements. That
+    /// is, for any elements `a`, `b`, and `c`, the following conditions must
+    /// hold:
+    ///
+    /// - `areEquivalent(a, a)` is always `true`. (Reflexivity)
+    /// - `areEquivalent(a, b)` implies `areEquivalent(b, a)`. (Symmetry)
+    /// - If `areEquivalent(a, b)` and `areEquivalent(b, c)` are both `true`, then
+    ///   `areEquivalent(a, c)` is also `true`. (Transitivity)
+    ///
+    /// - Parameters:
+    ///   - possiblePrefix: A sequence to compare to this sequence.
+    ///   - areEquivalent: A predicate that returns `true` if its two arguments
+    ///     are equivalent; otherwise, `false`.
+    /// - Returns: `true` if the initial elements of the sequence are equivalent
+    ///   to the elements of `possiblePrefix`; otherwise, `false`. If
+    ///   `possiblePrefix` has no elements, the return value is `true`.
+    ///
+    /// - SeeAlso: `starts(with:)`
+    public func starts<PossiblePrefix>(with possiblePrefix: PossiblePrefix, by areEquivalent: (Element, Element) throws -> Bool) rethrows -> Bool where PossiblePrefix : Sequence, PossiblePrefix.Iterator.Element == Element
+
+    /// Returns a Boolean value indicating whether this sequence and another
+    /// sequence contain equivalent elements, using the given predicate as the
+    /// equivalence test.
+    ///
+    /// At least one of the sequences must be finite.
+    ///
+    /// The predicate must be a *equivalence relation* over the elements. That
+    /// is, for any elements `a`, `b`, and `c`, the following conditions must
+    /// hold:
+    ///
+    /// - `areEquivalent(a, a)` is always `true`. (Reflexivity)
+    /// - `areEquivalent(a, b)` implies `areEquivalent(b, a)`. (Symmetry)
+    /// - If `areEquivalent(a, b)` and `areEquivalent(b, c)` are both `true`, then
+    ///   `areEquivalent(a, c)` is also `true`. (Transitivity)
+    ///
+    /// - Parameters:
+    ///   - other: A sequence to compare to this sequence.
+    ///   - areEquivalent: A predicate that returns `true` if its two arguments
+    ///     are equivalent; otherwise, `false`.
+    /// - Returns: `true` if this sequence and `other` contain equivalent items,
+    ///   using `areEquivalent` as the equivalence test; otherwise, `false.`
+    ///
+    /// - SeeAlso: `elementsEqual(_:)`
+    public func elementsEqual<OtherSequence>(_ other: OtherSequence, by areEquivalent: (Element, Element) throws -> Bool) rethrows -> Bool where OtherSequence : Sequence, OtherSequence.Iterator.Element == Element
+
+    /// Returns a Boolean value indicating whether the sequence precedes another
+    /// sequence in a lexicographical (dictionary) ordering, using the given
+    /// predicate to compare elements.
+    ///
+    /// The predicate must be a *strict weak ordering* over the elements. That
+    /// is, for any elements `a`, `b`, and `c`, the following conditions must
+    /// hold:
+    ///
+    /// - `areInIncreasingOrder(a, a)` is always `false`. (Irreflexivity)
+    /// - If `areInIncreasingOrder(a, b)` and `areInIncreasingOrder(b, c)` are
+    ///   both `true`, then `areInIncreasingOrder(a, c)` is also
+    ///   `true`. (Transitive comparability)
+    /// - Two elements are *incomparable* if neither is ordered before the other
+    ///   according to the predicate. If `a` and `b` are incomparable, and `b`
+    ///   and `c` are incomparable, then `a` and `c` are also incomparable.
+    ///   (Transitive incomparability)
+    ///
+    /// - Parameters:
+    ///   - other: A sequence to compare to this sequence.
+    ///   - areInIncreasingOrder:  A predicate that returns `true` if its first
+    ///     argument should be ordered before its second argument; otherwise,
+    ///     `false`.
+    /// - Returns: `true` if this sequence precedes `other` in a dictionary
+    ///   ordering as ordered by `areInIncreasingOrder`; otherwise, `false`.
+    ///
+    /// - Note: This method implements the mathematical notion of lexicographical
+    ///   ordering, which has no connection to Unicode.  If you are sorting
+    ///   strings to present to the end user, use `String` APIs that perform
+    ///   localized comparison instead.
+    /// - SeeAlso: `lexicographicallyPrecedes(_:)`
+    public func lexicographicallyPrecedes<OtherSequence>(_ other: OtherSequence, by areInIncreasingOrder: (Element, Element) throws -> Bool) rethrows -> Bool where OtherSequence : Sequence, OtherSequence.Iterator.Element == Element
+
+    /// Returns a Boolean value indicating whether the sequence contains an
+    /// element that satisfies the given predicate.
+    ///
+    /// You can use the predicate to check for an element of a type that
+    /// doesn't conform to the `Equatable` protocol, such as the
+    /// `HTTPResponse` enumeration in this example.
+    ///
+    ///     enum HTTPResponse {
+    ///         case ok
+    ///         case error(Int)
+    ///     }
+    ///
+    ///     let lastThreeResponses: [HTTPResponse] = [.ok, .ok, .error(404)]
+    ///     let hadError = lastThreeResponses.contains { element in
+    ///         if case .error = element {
+    ///             return true
+    ///         } else {
+    ///             return false
+    ///         }
+    ///     }
+    ///     // 'hadError' == true
+    ///
+    /// Alternatively, a predicate can be satisfied by a range of `Equatable`
+    /// elements or a general condition. This example shows how you can check an
+    /// array for an expense greater than $100.
+    ///
+    ///     let expenses = [21.37, 55.21, 9.32, 10.18, 388.77, 11.41]
+    ///     let hasBigPurchase = expenses.contains { $0 > 100 }
+    ///     // 'hasBigPurchase' == true
+    ///
+    /// - Parameter predicate: A closure that takes an element of the sequence
+    ///   as its argument and returns a Boolean value that indicates whether
+    ///   the passed element represents a match.
+    /// - Returns: `true` if the sequence contains an element that satisfies
+    ///   `predicate`; otherwise, `false`.
+    public func contains(where predicate: (Element) throws -> Bool) rethrows -> Bool
+
+    /// Returns the result of combining the elements of the sequence using the
+    /// given closure.
+    ///
+    /// Use the `reduce(_:_:)` method to produce a single value from the elements
+    /// of an entire sequence. For example, you can use this method on an array
+    /// of numbers to find their sum or product.
+    ///
+    /// The `nextPartialResult` closure is called sequentially with an
+    /// accumulating value initialized to `initialResult` and each element of
+    /// the sequence. This example shows how to find the sum of an array of
+    /// numbers.
+    ///
+    ///     let numbers = [1, 2, 3, 4]
+    ///     let numberSum = numbers.reduce(0, { x, y in
+    ///         x + y
+    ///     })
+    ///     // numberSum == 10
+    ///
+    /// When `numbers.reduce(_:_:)` is called, the following steps occur:
+    ///
+    /// 1. The `nextPartialResult` closure is called with `initialResult`---`0`
+    ///    in this case---and the first element of `numbers`, returning the sum:
+    ///    `1`.
+    /// 2. The closure is called again repeatedly with the previous call's return
+    ///    value and each element of the sequence.
+    /// 3. When the sequence is exhausted, the last value returned from the
+    ///    closure is returned to the caller.
+    ///
+    /// If the sequence has no elements, `nextPartialResult` is never executed
+    /// and `initialResult` is the result of the call to `reduce(_:_:)`.
+    ///
+    /// - Parameters:
+    ///   - initialResult: The value to use as the initial accumulating value.
+    ///     `initialResult` is passed to `nextPartialResult` the first time the
+    ///     closure is executed.
+    ///   - nextPartialResult: A closure that combines an accumulating value and
+    ///     an element of the sequence into a new accumulating value, to be used
+    ///     in the next call of the `nextPartialResult` closure or returned to
+    ///     the caller.
+    /// - Returns: The final accumulated value. If the sequence has no elements,
+    ///   the result is `initialResult`.
+    public func reduce<Result>(_ initialResult: Result, _ nextPartialResult: (Result, Element) throws -> Result) rethrows -> Result
+
+    /// Returns an array containing the concatenated results of calling the
+    /// given transformation with each element of this sequence.
+    ///
+    /// Use this method to receive a single-level collection when your
+    /// transformation produces a sequence or collection for each element.
+    ///
+    /// In this example, note the difference in the result of using `map` and
+    /// `flatMap` with a transformation that returns an array.
+    ///
+    ///     let numbers = [1, 2, 3, 4]
+    ///
+    ///     let mapped = numbers.map { Array(count: $0, repeatedValue: $0) }
+    ///     // [[1], [2, 2], [3, 3, 3], [4, 4, 4, 4]]
+    ///
+    ///     let flatMapped = numbers.flatMap { Array(count: $0, repeatedValue: $0) }
+    ///     // [1, 2, 2, 3, 3, 3, 4, 4, 4, 4]
+    ///
+    /// In fact, `s.flatMap(transform)`  is equivalent to
+    /// `Array(s.map(transform).joined())`.
+    ///
+    /// - Parameter transform: A closure that accepts an element of this
+    ///   sequence as its argument and returns a sequence or collection.
+    /// - Returns: The resulting flattened array.
+    ///
+    /// - Complexity: O(*m* + *n*), where *m* is the length of this sequence
+    ///   and *n* is the length of the result.
+    /// - SeeAlso: `joined()`, `map(_:)`
+    public func flatMap<SegmentOfResult>(_ transform: (Element) throws -> SegmentOfResult) rethrows -> [SegmentOfResult.Iterator.Element] where SegmentOfResult : Sequence
+
+    /// Returns an array containing the non-`nil` results of calling the given
+    /// transformation with each element of this sequence.
+    ///
+    /// Use this method to receive an array of nonoptional values when your
+    /// transformation produces an optional value.
+    ///
+    /// In this example, note the difference in the result of using `map` and
+    /// `flatMap` with a transformation that returns an optional `Int` value.
+    ///
+    ///     let possibleNumbers = ["1", "2", "three", "///4///", "5"]
+    ///
+    ///     let mapped: [Int?] = possibleNumbers.map { str in Int(str) }
+    ///     // [1, 2, nil, nil, 5]
+    ///
+    ///     let flatMapped: [Int] = possibleNumbers.flatMap { str in Int(str) }
+    ///     // [1, 2, 5]
+    ///
+    /// - Parameter transform: A closure that accepts an element of this
+    ///   sequence as its argument and returns an optional value.
+    /// - Returns: An array of the non-`nil` results of calling `transform`
+    ///   with each element of the sequence.
+    ///
+    /// - Complexity: O(*m* + *n*), where *m* is the length of this sequence
+    ///   and *n* is the length of the result.
+    public func flatMap<ElementOfResult>(_ transform: (Element) throws -> ElementOfResult?) rethrows -> [ElementOfResult]
+}
+
+/// Augment `self` with lazy methods such as `map`, `filter`, etc.
+extension ArraySlice {
+
+    /// A view onto this collection that provides lazy implementations of
+    /// normally eager operations, such as `map` and `filter`.
+    ///
+    /// Use the `lazy` property when chaining operations to prevent
+    /// intermediate operations from allocating storage, or when you only
+    /// need a part of the final collection to avoid unnecessary computation.
+    ///
+    /// - SeeAlso: `LazySequenceProtocol`, `LazyCollectionProtocol`.
+    public var lazy: LazyBidirectionalCollection<ArraySlice<Element>> { get }
+}
+
+/// Supply the default `makeIterator()` method for `Collection` models
+/// that accept the default associated `Iterator`,
+/// `IndexingIterator<Self>`.
+extension ArraySlice where Element == Element {
+
+    /// Returns an iterator over the elements of the collection.
+    public func makeIterator() -> IndexingIterator<ArraySlice<Element>>
+}
+
+/// Default implementations of core requirements
+extension ArraySlice {
+
+    /// A Boolean value indicating whether the collection is empty.
+    ///
+    /// When you need to check whether your collection is empty, use the
+    /// `isEmpty` property instead of checking that the `count` property is
+    /// equal to zero. For collections that don't conform to
+    /// `RandomAccessCollection`, accessing the `count` property iterates
+    /// through the elements of the collection.
+    ///
+    ///     let horseName = "Silver"
+    ///     if horseName.characters.isEmpty {
+    ///         print("I've been through the desert on a horse with no name.")
+    ///     } else {
+    ///         print("Hi ho, \(horseName)!")
+    ///     }
+    ///     // Prints "Hi ho, Silver!")
+    ///
+    /// - Complexity: O(1)
+    public var isEmpty: Bool { get }
+
+    /// The first element of the collection.
+    ///
+    /// If the collection is empty, the value of this property is `nil`.
+    ///
+    ///     let numbers = [10, 20, 30, 40, 50]
+    ///     if let firstNumber = numbers.first {
+    ///         print(firstNumber)
+    ///     }
+    ///     // Prints "10"
+    public var first: Element? { get }
+
+    /// A value less than or equal to the number of elements in the collection.
+    ///
+    /// - Complexity: O(1) if the collection conforms to
+    ///   `RandomAccessCollection`; otherwise, O(*n*), where *n* is the length
+    ///   of the collection.
+    public var underestimatedCount: Int { get }
+
+    /// The number of elements in the collection.
+    ///
+    /// To check whether a collection is empty, use its `isEmpty` property
+    /// instead of comparing `count` to zero. Unless the collection guarantees
+    /// random-access performance, calculating `count` can be an O(*n*)
+    /// operation.
+    ///
+    /// - Complexity: O(1) if the collection conforms to
+    ///   `RandomAccessCollection`; otherwise, O(*n*), where *n* is the length
+    ///   of the collection.
+    public var count: Int { get }
+}
+
+/// Augment `self` with lazy methods such as `map`, `filter`, etc.
+extension ArraySlice {
+
+    /// A view onto this collection that provides lazy implementations of
+    /// normally eager operations, such as `map` and `filter`.
+    ///
+    /// Use the `lazy` property when chaining operations to prevent
+    /// intermediate operations from allocating storage, or when you only
+    /// need a part of the final collection to avoid unnecessary computation.
+    ///
+    /// - SeeAlso: `LazySequenceProtocol`, `LazyCollectionProtocol`.
+    public var lazy: LazyRandomAccessCollection<ArraySlice<Element>> { get }
+}
+
+/// Augment `self` with lazy methods such as `map`, `filter`, etc.
+extension ArraySlice {
+
+    /// A view onto this collection that provides lazy implementations of
+    /// normally eager operations, such as `map` and `filter`.
+    ///
+    /// Use the `lazy` property when chaining operations to prevent
+    /// intermediate operations from allocating storage, or when you only
+    /// need a part of the final collection to avoid unnecessary computation.
+    ///
+    /// - SeeAlso: `LazySequenceProtocol`, `LazyCollectionProtocol`.
+    public var lazy: LazyCollection<ArraySlice<Element>> { get }
+}
+
+extension ArraySlice : ExpressibleByArrayLiteral {
+
+    /// Creates an array from the given array literal.
+    ///
+    /// Do not call this initializer directly. It is used by the compiler when
+    /// you use an array literal. Instead, create a new array by using an array
+    /// literal as its value. To do this, enclose a comma-separated list of
+    /// values in square brackets.
+    ///
+    /// Here, an array of strings is created from an array literal holding only
+    /// strings:
+    ///
+    ///     let ingredients: ArraySlice =
+    ///           ["cocoa beans", "sugar", "cocoa butter", "salt"]
+    ///
+    /// - Parameter elements: A variadic list of elements of the new array.
+    public init(arrayLiteral elements: Element...)
+}
+
+extension ArraySlice : CustomReflectable {
+
+    /// A mirror that reflects the array.
+    public var customMirror: Mirror { get }
+}
+
+extension ArraySlice : RangeReplaceableCollection {
+
+    /// Creates a new, empty array.
+    ///
+    /// This is equivalent to initializing with an empty array literal.
+    /// For example:
+    ///
+    ///     var emptyArray = Array<Int>()
+    ///     print(emptyArray.isEmpty)
+    ///     // Prints "true"
+    ///
+    ///     emptyArray = []
+    ///     print(emptyArray.isEmpty)
+    ///     // Prints "true"
+    public init()
+
+    /// Creates an array containing the elements of a sequence.
+    ///
+    /// You can use this initializer to create an array from any other type that
+    /// conforms to the `Sequence` protocol. For example, you might want to
+    /// create an array with the integers from 1 through 7. Use this initializer
+    /// around a range instead of typing all those numbers in an array literal.
+    ///
+    ///     let numbers = Array(1...7)
+    ///     print(numbers)
+    ///     // Prints "[1, 2, 3, 4, 5, 6, 7]"
+    ///
+    /// You can also use this initializer to convert a complex sequence or
+    /// collection type back to an array. For example, the `keys` property of
+    /// a dictionary isn't an array with its own storage, it's a collection
+    /// that maps its elements from the dictionary only when they're
+    /// accessed, saving the time and space needed to allocate an array. If
+    /// you need to pass those keys to a method that takes an array, however,
+    /// use this initializer to convert that list from its type of
+    /// `LazyMapCollection<Dictionary<String, Int>, Int>` to a simple
+    /// `[String]`.
+    ///
+    ///     func cacheImagesWithNames(names: [String]) {
+    ///         // custom image loading and caching
+    ///      }
+    ///
+    ///     let namedHues: [String: Int] = ["Vermillion": 18, "Magenta": 302,
+    ///             "Gold": 50, "Cerise": 320]
+    ///     let colorNames = Array(namedHues.keys)
+    ///     cacheImagesWithNames(colorNames)
+    ///
+    ///     print(colorNames)
+    ///     // Prints "["Gold", "Cerise", "Magenta", "Vermillion"]"
+    ///
+    /// - Parameter s: The sequence of elements to turn into an array.
+    public init<S>(_ s: S) where S : Sequence, S.Iterator.Element == Element
+
+    /// Creates a new array containing the specified number of a single, repeated
+    /// value.
+    ///
+    /// Here's an example of creating an array initialized with five strings
+    /// containing the letter *Z*.
+    ///
+    ///     let fiveZs = Array(repeating: "Z", count: 5)
+    ///     print(fiveZs)
+    ///     // Prints "["Z", "Z", "Z", "Z", "Z"]"
+    ///
+    /// - Parameters:
+    ///   - repeatedValue: The element to repeat.
+    ///   - count: The number of times to repeat the value passed in the
+    ///     `repeating` parameter. `count` must be zero or greater.
+    public init(repeating repeatedValue: Element, count: Int)
+
+    /// The number of elements in the array.
+    public var count: Int { get }
+
+    /// The total number of elements that the array can contain without
+    /// allocating new storage.
+    ///
+    /// Every array reserves a specific amount of memory to hold its contents.
+    /// When you add elements to an array and that array begins to exceed its
+    /// reserved capacity, the array allocates a larger region of memory and
+    /// copies its elements into the new storage. The new storage is a multiple
+    /// of the old storage's size. This exponential growth strategy means that
+    /// appending an element happens in constant time, averaging the performance
+    /// of many append operations. Append operations that trigger reallocation
+    /// have a performance cost, but they occur less and less often as the array
+    /// grows larger.
+    ///
+    /// The following example creates an array of integers from an array literal,
+    /// then appends the elements of another collection. Before appending, the
+    /// array allocates new storage that is large enough store the resulting
+    /// elements.
+    ///
+    ///     var numbers = [10, 20, 30, 40, 50]
+    ///     // numbers.count == 5
+    ///     // numbers.capacity == 5
+    ///
+    ///     numbers.append(contentsOf: stride(from: 60, through: 100, by: 10))
+    ///     // numbers.count == 10
+    ///     // numbers.capacity == 12
+    public var capacity: Int { get }
+
+    /// Reserves enough space to store the specified number of elements.
+    ///
+    /// If you are adding a known number of elements to an array, use this method
+    /// to avoid multiple reallocations. This method ensures that the array has
+    /// unique, mutable, contiguous storage, with space allocated for at least
+    /// the requested number of elements.
+    ///
+    /// Calling the `reserveCapacity(_:)` method on an array with bridged storage
+    /// triggers a copy to contiguous storage even if the existing storage
+    /// has room to store `minimumCapacity` elements.
+    ///
+    /// For performance reasons, the size of the newly allocated storage might be
+    /// greater than the requested capacity. Use the array's `capacity` property
+    /// to determine the size of the new storage.
+    ///
+    /// Preserving an Array's Geometric Growth Strategy
+    /// ===============================================
+    ///
+    /// If you implement a custom data structure backed by an array that grows
+    /// dynamically, naively calling the `reserveCapacity(_:)` method can lead
+    /// to worse than expected performance. Arrays need to follow a geometric
+    /// allocation pattern for appending elements to achieve amortized
+    /// constant-time performance. The `Array` type's `append(_:)` and
