@@ -1,0 +1,1001 @@
+    ///     subsequences are returned, the last one is a suffix of the original
+    ///     sequence containing the remaining elements. `maxSplits` must be
+    ///     greater than or equal to zero. The default value is `Int.max`.
+    ///   - omittingEmptySubsequences: If `false`, an empty subsequence is
+    ///     returned in the result for each consecutive pair of `separator`
+    ///     elements in the sequence and for each instance of `separator` at the
+    ///     start or end of the sequence. If `true`, only nonempty subsequences
+    ///     are returned. The default value is `true`.
+    /// - Returns: An array of subsequences, split from this sequence's elements.
+    public func split(separator: Element, maxSplits: Int = default, omittingEmptySubsequences: Bool = default) -> [AnySequence<Element>]
+
+    /// Returns a Boolean value indicating whether the initial elements of the
+    /// sequence are the same as the elements in another sequence.
+    ///
+    /// This example tests whether one countable range begins with the elements
+    /// of another countable range.
+    ///
+    ///     let a = 1...3
+    ///     let b = 1...10
+    ///
+    ///     print(b.starts(with: a))
+    ///     // Prints "true"
+    ///
+    /// Passing a sequence with no elements or an empty collection as
+    /// `possiblePrefix` always results in `true`.
+    ///
+    ///     print(b.starts(with: []))
+    ///     // Prints "true"
+    ///
+    /// - Parameter possiblePrefix: A sequence to compare to this sequence.
+    /// - Returns: `true` if the initial elements of the sequence are the same as
+    ///   the elements of `possiblePrefix`; otherwise, `false`. If
+    ///   `possiblePrefix` has no elements, the return value is `true`.
+    ///
+    /// - SeeAlso: `starts(with:by:)`
+    public func starts<PossiblePrefix>(with possiblePrefix: PossiblePrefix) -> Bool where PossiblePrefix : Sequence, PossiblePrefix.Iterator.Element == Element
+
+    /// Returns a Boolean value indicating whether this sequence and another
+    /// sequence contain the same elements in the same order.
+    ///
+    /// At least one of the sequences must be finite.
+    ///
+    /// This example tests whether one countable range shares the same elements
+    /// as another countable range and an array.
+    ///
+    ///     let a = 1...3
+    ///     let b = 1...10
+    ///
+    ///     print(a.elementsEqual(b))
+    ///     // Prints "false"
+    ///     print(a.elementsEqual([1, 2, 3]))
+    ///     // Prints "true"
+    ///
+    /// - Parameter other: A sequence to compare to this sequence.
+    /// - Returns: `true` if this sequence and `other` contain the same elements
+    ///   in the same order.
+    ///
+    /// - SeeAlso: `elementsEqual(_:by:)`
+    public func elementsEqual<OtherSequence>(_ other: OtherSequence) -> Bool where OtherSequence : Sequence, OtherSequence.Iterator.Element == Element
+}
+
+extension ContiguousArray where Element : Comparable {
+
+    /// Returns the elements of the sequence, sorted.
+    ///
+    /// You can sort any sequence of elements that conform to the
+    /// `Comparable` protocol by calling this method. Elements are sorted in
+    /// ascending order.
+    ///
+    /// The sorting algorithm is not stable. A nonstable sort may change the
+    /// relative order of elements that compare equal.
+    ///
+    /// Here's an example of sorting a list of students' names. Strings in Swift
+    /// conform to the `Comparable` protocol, so the names are sorted in
+    /// ascending order according to the less-than operator (`<`).
+    ///
+    ///     let students: Set = ["Kofi", "Abena", "Peter", "Kweku", "Akosua"]
+    ///     let sortedStudents = students.sorted()
+    ///     print(sortedStudents)
+    ///     // Prints "["Abena", "Akosua", "Kofi", "Kweku", "Peter"]"
+    ///
+    /// To sort the elements of your sequence in descending order, pass the
+    /// greater-than operator (`>`) to the `sorted(by:)` method.
+    ///
+    ///     let descendingStudents = students.sorted(by: >)
+    ///     print(descendingStudents)
+    ///     // Prints "["Peter", "Kweku", "Kofi", "Akosua", "Abena"]"
+    ///
+    /// - Returns: A sorted array of the sequence's elements.
+    ///
+    /// - SeeAlso: `sorted(by:)`
+    /// 
+    public func sorted() -> [Element]
+
+    /// Returns the elements of the collection, sorted.
+    ///
+    /// You can sort any collection of elements that conform to the
+    /// `Comparable` protocol by calling this method. Elements are sorted in
+    /// ascending order.
+    ///
+    /// The sorting algorithm is not stable. A nonstable sort may change the
+    /// relative order of elements that compare equal.
+    ///
+    /// Here's an example of sorting a list of students' names. Strings in Swift
+    /// conform to the `Comparable` protocol, so the names are sorted in
+    /// ascending order according to the less-than operator (`<`).
+    ///
+    ///     let students: Set = ["Kofi", "Abena", "Peter", "Kweku", "Akosua"]
+    ///     let sortedStudents = students.sorted()
+    ///     print(sortedStudents)
+    ///     // Prints "["Abena", "Akosua", "Kofi", "Kweku", "Peter"]"
+    ///
+    /// To sort the elements of your collection in descending order, pass the
+    /// greater-than operator (`>`) to the `sorted(by:)` method.
+    ///
+    ///     let descendingStudents = students.sorted(by: >)
+    ///     print(descendingStudents)
+    ///     // Prints "["Peter", "Kweku", "Kofi", "Akosua", "Abena"]"
+    ///
+    /// - Returns: A sorted array of the collection's elements.
+    ///
+    /// - SeeAlso: `sorted(by:)`
+    /// - MutatingVariant: sort
+    public func sorted() -> [Element]
+
+    /// Sorts the collection in place.
+    ///
+    /// You can sort any mutable collection of elements that conform to the
+    /// `Comparable` protocol by calling this method. Elements are sorted in
+    /// ascending order.
+    ///
+    /// The sorting algorithm is not stable. A nonstable sort may change the
+    /// relative order of elements that compare equal.
+    ///
+    /// Here's an example of sorting a list of students' names. Strings in Swift
+    /// conform to the `Comparable` protocol, so the names are sorted in
+    /// ascending order according to the less-than operator (`<`).
+    ///
+    ///     var students = ["Kofi", "Abena", "Peter", "Kweku", "Akosua"]
+    ///     students.sort()
+    ///     print(students)
+    ///     // Prints "["Abena", "Akosua", "Kofi", "Kweku", "Peter"]"
+    ///
+    /// To sort the elements of your collection in descending order, pass the
+    /// greater-than operator (`>`) to the `sort(by:)` method.
+    ///
+    ///     students.sort(by: >)
+    ///     print(students)
+    ///     // Prints "["Peter", "Kweku", "Kofi", "Akosua", "Abena"]"
+    public mutating func sort()
+
+    /// Returns the minimum element in the sequence.
+    ///
+    /// This example finds the smallest value in an array of height measurements.
+    ///
+    ///     let heights = [67.5, 65.7, 64.3, 61.1, 58.5, 60.3, 64.9]
+    ///     let lowestHeight = heights.min()
+    ///     print(lowestHeight)
+    ///     // Prints "Optional(58.5)"
+    ///
+    /// - Returns: The sequence's minimum element. If the sequence has no
+    ///   elements, returns `nil`.
+    ///
+    /// - SeeAlso: `min(by:)`
+    @warn_unqualified_access
+    public func min() -> Element?
+
+    /// Returns the maximum element in the sequence.
+    ///
+    /// This example finds the smallest value in an array of height measurements.
+    ///
+    ///     let heights = [67.5, 65.7, 64.3, 61.1, 58.5, 60.3, 64.9]
+    ///     let greatestHeight = heights.max()
+    ///     print(greatestHeight)
+    ///     // Prints "Optional(67.5)"
+    ///
+    /// - Returns: The sequence's maximum element. If the sequence has no
+    ///   elements, returns `nil`.
+    ///
+    /// - SeeAlso: `max(by:)`
+    @warn_unqualified_access
+    public func max() -> Element?
+
+    /// Returns a Boolean value indicating whether the sequence precedes another
+    /// sequence in a lexicographical (dictionary) ordering, using the
+    /// less-than operator (`<`) to compare elements.
+    ///
+    /// This example uses the `lexicographicallyPrecedes` method to test which
+    /// array of integers comes first in a lexicographical ordering.
+    ///
+    ///     let a = [1, 2, 2, 2]
+    ///     let b = [1, 2, 3, 4]
+    ///
+    ///     print(a.lexicographicallyPrecedes(b))
+    ///     // Prints "true"
+    ///     print(b.lexicographicallyPrecedes(b))
+    ///     // Prints "false"
+    ///
+    /// - Parameter other: A sequence to compare to this sequence.
+    /// - Returns: `true` if this sequence precedes `other` in a dictionary
+    ///   ordering; otherwise, `false`.
+    ///
+    /// - Note: This method implements the mathematical notion of lexicographical
+    ///   ordering, which has no connection to Unicode.  If you are sorting
+    ///   strings to present to the end user, use `String` APIs that
+    ///   perform localized comparison.
+    /// - SeeAlso: `lexicographicallyPrecedes(_:by:)`
+    public func lexicographicallyPrecedes<OtherSequence>(_ other: OtherSequence) -> Bool where OtherSequence : Sequence, OtherSequence.Iterator.Element == Element
+}
+
+extension ContiguousArray where Element == String {
+
+    /// Returns a new string by concatenating the elements of the sequence,
+    /// adding the given separator between each element.
+    ///
+    /// The following example shows how an array of strings can be joined to a
+    /// single, comma-separated string:
+    ///
+    ///     let cast = ["Vivien", "Marlon", "Kim", "Karl"]
+    ///     let list = cast.joined(separator: ", ")
+    ///     print(list)
+    ///     // Prints "Vivien, Marlon, Kim, Karl"
+    ///
+    /// - Parameter separator: A string to insert between each of the elements
+    ///   in this sequence. The default separator is an empty string.
+    /// - Returns: A single, concatenated string.
+    public func joined(separator: String = default) -> String
+}
+
+/// A slice of an `Array`, `ContiguousArray`, or `ArraySlice` instance.
+///
+/// The `ArraySlice` type makes it fast and efficient for you to perform
+/// operations on sections of a larger array. Instead of copying over the
+/// elements of a slice to new storage, an `ArraySlice` instance presents a
+/// view onto the storage of a larger array. And because `ArraySlice`
+/// presents the same interface as `Array`, you can generally perform the
+/// same operations on a slice as you could on the original array.
+///
+/// For more information about using arrays, see `Array` and `ContiguousArray`,
+/// with which `ArraySlice` shares most properties and methods.
+///
+/// Slices Are Views onto Arrays
+/// ============================
+///
+/// For example, suppose you have an array holding the number of absences
+/// from each class during a session.
+///
+///     let absences = [0, 2, 0, 4, 0, 3, 1, 0]
+///
+/// You want to compare the absences in the first half of the session with
+/// those in the second half. To do so, start by creating two slices of the
+/// `absences` array.
+///
+///     let midpoint = absences.count / 2
+///
+///     let firstHalf = absences.prefix(upTo: midpoint)
+///     let secondHalf = absences.suffix(from: midpoint)
+///
+/// Neither the `firstHalf` nor `secondHalf` slices allocate any new storage
+/// of their own. Instead, each presents a view onto the storage of the
+/// `absences` array.
+///
+/// You can call any method on the slices that you might have called on the
+/// `absences` array. To learn which half had more absences, use the
+/// `reduce(_:_:)` method to calculate each sum.
+///
+///     let firstHalfSum = firstHalf.reduce(0, +)
+///     let secondHalfSum = secondHalf.reduce(0, +)
+///
+///     if firstHalfSum > secondHalfSum {
+///         print("More absences in the first half.")
+///     } else {
+///         print("More absences in the second half.")
+///     }
+///     // Prints "More absences in the second half."
+///
+/// - Important: Long-term storage of `ArraySlice` instances is discouraged. A
+///   slice holds a reference to the entire storage of a larger array, not
+///   just to the portion it presents, even after the original array's lifetime
+///   ends. Long-term storage of a slice may therefore prolong the lifetime of
+///   elements that are no longer otherwise accessible, which can appear to be
+///   memory and object leakage.
+///
+/// Slices Maintain Indices
+/// =======================
+///
+/// Unlike `Array` and `ContiguousArray`, the starting index for an
+/// `ArraySlice` instance isn't always zero. Slices maintain the same
+/// indices of the larger array for the same elements, so the starting
+/// index of a slice depends on how it was created, letting you perform
+/// index-based operations on either a full array or a slice.
+///
+/// Sharing indices between collections and their subsequences is an important
+/// part of the design of Swift's collection algorithms. Suppose you are
+/// tasked with finding the first two days with absences in the session. To
+/// find the indices of the two days in question, follow these steps:
+///
+/// 1) Call `index(where:)` to find the index of the first element in the
+///    `absences` array that is greater than zero.
+/// 2) Create a slice of the `absences` array starting after the index found in
+///    step 1.
+/// 3) Call `index(where:)` again, this time on the slice created in step 2.
+///    Where in some languages you might pass a starting index into an
+///    `indexOf` method to find the second day, in Swift you perform the same
+///    operation on a slice of the original array.
+/// 4) Print the results using the indices found in steps 1 and 3 on the
+///    original `absences` array.
+///
+/// Here's an implementation of those steps:
+///
+///     if let i = absences.index(where: { $0 > 0 }) {                      // 1
+///         let absencesAfterFirst = absences.suffix(from: i + 1)           // 2
+///         if let j = absencesAfterFirst.index(where: { $0 > 0 }) {        // 3
+///             print("The first day with absences had \(absences[i]).")    // 4
+///             print("The second day with absences had \(absences[j]).")
+///         }
+///     }
+///     // Prints "The first day with absences had 2."
+///     // Prints "The second day with absences had 4."
+///
+/// In particular, note that `j`, the index of the second day with absences,
+/// was found in a slice of the original array and then used to access a value
+/// in the original `absences` array itself.
+///
+/// - Note: To safely reference the starting and ending indices of a slice,
+///   always use the `startIndex` and `endIndex` properties instead of
+///   specific values.
+public struct ArraySlice<Element> : RandomAccessCollection, MutableCollection {
+
+    /// A type that represents a position in the collection.
+    ///
+    /// Valid indices consist of the position of every element and a
+    /// "past the end" position that's not valid for use as a subscript
+    /// argument.
+    ///
+    /// - SeeAlso: endIndex
+    public typealias Index = Int
+
+    /// A type that provides the sequence's iteration interface and
+    /// encapsulates its iteration state.
+    public typealias Iterator = IndexingIterator<ArraySlice<Element>>
+
+    /// The position of the first element in a nonempty array.
+    ///
+    /// If the array is empty, `startIndex` is equal to `endIndex`.
+    public var startIndex: Int { get }
+
+    /// The array's "past the end" position---that is, the position one greater
+    /// than the last valid subscript argument.
+    ///
+    /// When you need a range that includes the last element of an array, use the
+    /// half-open range operator (`..<`) with `endIndex`. The `..<` operator
+    /// creates a range that doesn't include the upper bound, so it's always
+    /// safe to use with `endIndex`. For example:
+    ///
+    ///     let numbers = [10, 20, 30, 40, 50]
+    ///     if let i = numbers.index(of: 30) {
+    ///         print(numbers[i ..< numbers.endIndex])
+    ///     }
+    ///     // Prints "[30, 40, 50]"
+    ///
+    /// If the array is empty, `endIndex` is equal to `startIndex`.
+    public var endIndex: Int { get }
+
+    /// Returns the position immediately after the given index.
+    ///
+    /// The successor of an index must be well defined. For an index `i` into a
+    /// collection `c`, calling `c.index(after: i)` returns the same index every
+    /// time.
+    ///
+    /// - Parameter i: A valid index of the collection. `i` must be less than
+    ///   `endIndex`.
+    /// - Returns: The index value immediately after `i`.
+    public func index(after i: Int) -> Int
+
+    /// Replaces the given index with its successor.
+    ///
+    /// - Parameter i: A valid index of the collection. `i` must be less than
+    ///   `endIndex`.
+    ///
+    /// - SeeAlso: `index(after:)`
+    public func formIndex(after i: inout Int)
+
+    /// Returns the position immediately before the given index.
+    ///
+    /// - Parameter i: A valid index of the collection. `i` must be greater than
+    ///   `startIndex`.
+    /// - Returns: The index value immediately before `i`.
+    public func index(before i: Int) -> Int
+
+    /// Replaces the given index with its predecessor.
+    ///
+    /// - Parameter i: A valid index of the collection. `i` must be greater than
+    ///   `startIndex`.
+    public func formIndex(before i: inout Int)
+
+    /// Returns an index that is the specified distance from the given index.
+    ///
+    /// The following example obtains an index advanced four positions from an
+    /// array's starting index and then prints the element at that position.
+    ///
+    ///     let numbers = [10, 20, 30, 40, 50]
+    ///     let i = numbers.index(numbers.startIndex, offsetBy: 4)
+    ///     print(numbers[i])
+    ///     // Prints "50"
+    ///
+    /// The value passed as `n` must not offset `i` beyond the bounds of the
+    /// collection.
+    ///
+    /// - Parameters:
+    ///   - i: A valid index of the array.
+    ///   - n: The distance to offset `i`.
+    /// - Returns: An index offset by `n` from the index `i`. If `n` is positive,
+    ///   this is the same value as the result of `n` calls to `index(after:)`.
+    ///   If `n` is negative, this is the same value as the result of `-n` calls
+    ///   to `index(before:)`.
+    public func index(_ i: Int, offsetBy n: Int) -> Int
+
+    /// Returns an index that is the specified distance from the given index,
+    /// unless that distance is beyond a given limiting index.
+    ///
+    /// The following example obtains an index advanced four positions from an
+    /// array's starting index and then prints the element at that position. The
+    /// operation doesn't require going beyond the limiting `numbers.endIndex`
+    /// value, so it succeeds.
+    ///
+    ///     let numbers = [10, 20, 30, 40, 50]
+    ///     if let i = numbers.index(numbers.startIndex,
+    ///                              offsetBy: 4,
+    ///                              limitedBy: numbers.endIndex) {
+    ///         print(numbers[i])
+    ///     }
+    ///     // Prints "50"
+    ///
+    /// The next example attempts to retrieve an index ten positions from
+    /// `numbers.startIndex`, but fails, because that distance is beyond the
+    /// index passed as `limit`.
+    ///
+    ///     let j = numbers.index(numbers.startIndex,
+    ///                           offsetBy: 10,
+    ///                           limitedBy: numbers.endIndex)
+    ///     print(j)
+    ///     // Prints "nil"
+    ///
+    /// The value passed as `n` must not offset `i` beyond the bounds of the
+    /// collection, unless the index passed as `limit` prevents offsetting
+    /// beyond those bounds.
+    ///
+    /// - Parameters:
+    ///   - i: A valid index of the array.
+    ///   - n: The distance to offset `i`.
+    ///   - limit: A valid index of the collection to use as a limit. If `n > 0`,
+    ///     `limit` has no effect if it is less than `i`. Likewise, if `n < 0`,
+    ///     `limit` has no effect if it is greater than `i`.
+    /// - Returns: An index offset by `n` from the index `i`, unless that index
+    ///   would be beyond `limit` in the direction of movement. In that case,
+    ///   the method returns `nil`.
+    ///
+    /// - SeeAlso: `index(_:offsetBy:)`, `formIndex(_:offsetBy:limitedBy:)`
+    public func index(_ i: Int, offsetBy n: Int, limitedBy limit: Int) -> Int?
+
+    /// Returns the distance between two indices.
+    ///
+    /// - Parameters:
+    ///   - start: A valid index of the collection.
+    ///   - end: Another valid index of the collection. If `end` is equal to
+    ///     `start`, the result is zero.
+    /// - Returns: The distance between `start` and `end`.
+    public func distance(from start: Int, to end: Int) -> Int
+
+    /// A type that represents the indices that are valid for subscripting the
+    /// collection, in ascending order.
+    public typealias Indices = CountableRange<Int>
+
+    /// Accesses the element at the specified position.
+    ///
+    /// The following example uses indexed subscripting to update an array's
+    /// second element. After assigning the new value (`"Butler"`) at a specific
+    /// position, that value is immediately available at that same position.
+    ///
+    ///     var streets = ["Adams", "Bryant", "Channing", "Douglas", "Evarts"]
+    ///     streets[1] = "Butler"
+    ///     print(streets[1])
+    ///     // Prints "Butler"
+    ///
+    /// - Parameter index: The position of the element to access. `index` must be
+    ///   greater than or equal to `startIndex` and less than `endIndex`.
+    ///
+    /// - Complexity: Reading an element from an array is O(1). Writing is O(1)
+    ///   unless the array's storage is shared with another array, in which case
+    ///   writing is O(*n*), where *n* is the length of the array.
+    public subscript(index: Int) -> Element
+
+    /// Accesses a contiguous subrange of the array's elements.
+    ///
+    /// The returned `ArraySlice` instance uses the same indices for the same
+    /// elements as the original array. In particular, that slice, unlike an
+    /// array, may have a nonzero `startIndex` and an `endIndex` that is not
+    /// equal to `count`. Always use the slice's `startIndex` and `endIndex`
+    /// properties instead of assuming that its indices start or end at a
+    /// particular value.
+    ///
+    /// This example demonstrates getting a slice of an array of strings, finding
+    /// the index of one of the strings in the slice, and then using that index
+    /// in the original array.
+    ///
+    ///     let streets = ["Adams", "Bryant", "Channing", "Douglas", "Evarts"]
+    ///     let streetsSlice = streets[2 ..< streets.endIndex]
+    ///     print(streetsSlice)
+    ///     // Prints "["Channing", "Douglas", "Evarts"]"
+    ///
+    ///     let i = streetsSlice.index(of: "Evarts")    // 4
+    ///     print(streets[i!])
+    ///     // Prints "Evarts"
+    ///
+    /// - Parameter bounds: A range of integers. The bounds of the range must be
+    ///   valid indices of the array.
+    public subscript(bounds: Range<Int>) -> ArraySlice<Element>
+
+    /// Calls a closure with a pointer to the array's contiguous storage.
+    ///
+    /// Often, the optimizer can eliminate bounds checks within an array
+    /// algorithm, but when that fails, invoking the same algorithm on the
+    /// buffer pointer passed into your closure lets you trade safety for speed.
+    ///
+    /// The following example shows how you can iterate over the contents of the
+    /// buffer pointer:
+    ///
+    ///     let numbers = [1, 2, 3, 4, 5]
+    ///     let sum = numbers.withUnsafeBufferPointer { buffer -> Int in
+    ///         var result = 0
+    ///         for i in stride(from: buffer.startIndex, to: buffer.endIndex, by: 2) {
+    ///             result += buffer[i]
+    ///         }
+    ///         return result
+    ///     }
+    ///     // 'sum' == 9
+    ///
+    /// The pointer passed as an argument to `body` is valid only for the
+    /// lifetime of the closure. Do not escape it from the closure for later
+    /// use.
+    ///
+    /// - Parameter body: A closure with an `UnsafeBufferPointer` parameter that
+    ///   points to the contiguous storage for the array.  If
+    ///   `body` has a return value, it is used as the return value for the
+    ///   `withUnsafeBufferPointer(_:)` method. The pointer argument is valid
+    ///   only for the duration of the closure's execution.
+    /// - Returns: The return value of the `body` closure parameter, if any.
+    ///
+    /// - SeeAlso: `withUnsafeMutableBufferPointer`, `UnsafeBufferPointer`
+    public func withUnsafeBufferPointer<R>(_ body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R
+
+    /// Calls the given closure with a pointer to the array's mutable contiguous
+    /// storage.
+    ///
+    /// Often, the optimizer can eliminate bounds checks within an array
+    /// algorithm, but when that fails, invoking the same algorithm on the
+    /// buffer pointer passed into your closure lets you trade safety for speed.
+    ///
+    /// The following example shows how modifying the contents of the
+    /// `UnsafeMutableBufferPointer` argument to `body` alters the contents of
+    /// the array:
+    ///
+    ///     var numbers = [1, 2, 3, 4, 5]
+    ///     numbers.withUnsafeMutableBufferPointer { buffer in
+    ///         for i in stride(from: buffer.startIndex, to: buffer.endIndex - 1, by: 2) {
+    ///             swap(&buffer[i], &buffer[i + 1])
+    ///         }
+    ///     }
+    ///     print(numbers)
+    ///     // Prints "[2, 1, 4, 3, 5]"
+    ///
+    /// The pointer passed as an argument to `body` is valid only for the
+    /// lifetime of the closure. Do not escape it from the closure for later
+    /// use.
+    ///
+    /// - Warning: Do not rely on anything about the array that is the target of
+    ///   this method during execution of the `body` closure; it might not
+    ///   appear to have its correct value. Instead, use only the
+    ///   `UnsafeMutableBufferPointer` argument to `body`.
+    ///
+    /// - Parameter body: A closure with an `UnsafeMutableBufferPointer`
+    ///   parameter that points to the contiguous storage for the array.
+    ///    If `body` has a return value, it is used as the
+    ///   return value for the `withUnsafeMutableBufferPointer(_:)` method. The
+    ///   pointer argument is valid only for the duration of the closure's
+    ///   execution.
+    /// - Returns: The return value of the `body` closure parameter, if any.
+    ///
+    /// - SeeAlso: `withUnsafeBufferPointer`, `UnsafeMutableBufferPointer`
+    public mutating func withUnsafeMutableBufferPointer<R>(_ body: (inout UnsafeMutableBufferPointer<Element>) throws -> R) rethrows -> R
+
+    /// Replaces a range of elements with the elements in the specified
+    /// collection.
+    ///
+    /// This method has the effect of removing the specified range of elements
+    /// from the array and inserting the new elements at the same location. The
+    /// number of new elements need not match the number of elements being
+    /// removed.
+    ///
+    /// In this example, three elements in the middle of an array of integers are
+    /// replaced by the five elements of a `Repeated<Int>` instance.
+    ///
+    ///      var nums = [10, 20, 30, 40, 50]
+    ///      nums.replaceSubrange(1...3, with: repeatElement(1, count: 5))
+    ///      print(nums)
+    ///      // Prints "[10, 1, 1, 1, 1, 1, 50]"
+    ///
+    /// If you pass a zero-length range as the `subrange` parameter, this method
+    /// inserts the elements of `newElements` at `subrange.startIndex`. Calling
+    /// the `insert(contentsOf:at:)` method instead is preferred.
+    ///
+    /// Likewise, if you pass a zero-length collection as the `newElements`
+    /// parameter, this method removes the elements in the given subrange
+    /// without replacement. Calling the `removeSubrange(_:)` method instead is
+    /// preferred.
+    ///
+    /// - Parameters:
+    ///   - subrange: The subrange of the array to replace. The start and end of
+    ///     a subrange must be valid indices of the array.
+    ///   - newElements: The new elements to add to the array.
+    ///
+    /// - Complexity: O(`subrange.count`) if you are replacing a suffix of the
+    ///   array with an empty collection; otherwise, O(*n*), where *n* is the
+    ///   length of the array.
+    public mutating func replaceSubrange<C>(_ subrange: Range<Int>, with newElements: C) where C : Collection, C.Iterator.Element == Element
+
+    /// Calls the given closure with a pointer to the underlying bytes of the
+    /// array's mutable contiguous storage.
+    ///
+    /// The array's `Element` type must be a *trivial type*, which can be copied
+    /// with just a bit-for-bit copy without any indirection or
+    /// reference-counting operations. Generally, native Swift types that do not
+    /// contain strong or weak references are trivial, as are imported C structs
+    /// and enums.
+    ///
+    /// The following example copies bytes from the `byteValues` array into
+    /// `numbers`, an array of `Int`:
+    ///
+    ///     var numbers: [Int32] = [0, 0]
+    ///     var byteValues: [UInt8] = [0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00]
+    ///
+    ///     numbers.withUnsafeMutableBytes { destBytes in
+    ///         byteValues.withUnsafeBytes { srcBytes in
+    ///             destBytes.copyBytes(from: srcBytes)
+    ///         }
+    ///     }
+    ///     // numbers == [1, 2]
+    ///
+    /// The pointer passed as an argument to `body` is valid only for the
+    /// lifetime of the closure. Do not escape it from the closure for later
+    /// use.
+    ///
+    /// - Warning: Do not rely on anything about the array that is the target of
+    ///   this method during execution of the `body` closure; it might not
+    ///   appear to have its correct value. Instead, use only the
+    ///   `UnsafeMutableRawBufferPointer` argument to `body`.
+    ///
+    /// - Parameter body: A closure with an `UnsafeMutableRawBufferPointer`
+    ///   parameter that points to the contiguous storage for the array.
+    ///    If no such storage exists, it is created. If `body` has a return value, it is used as the
+    ///   return value for the `withUnsafeMutableBytes(_:)` method. The argument
+    ///   is valid only for the duration of the closure's execution.
+    /// - Returns: The return value of the `body` closure parameter, if any.
+    ///
+    /// - SeeAlso: `withUnsafeBytes`, `UnsafeMutableRawBufferPointer`
+    public mutating func withUnsafeMutableBytes<R>(_ body: (UnsafeMutableRawBufferPointer) throws -> R) rethrows -> R
+
+    /// Calls the given closure with a pointer to the underlying bytes of the
+    /// array's contiguous storage.
+    ///
+    /// The array's `Element` type must be a *trivial type*, which can be copied
+    /// with just a bit-for-bit copy without any indirection or
+    /// reference-counting operations. Generally, native Swift types that do not
+    /// contain strong or weak references are trivial, as are imported C structs
+    /// and enums.
+    ///
+    /// The following example copies the bytes of the `numbers` array into a
+    /// buffer of `UInt8`:
+    ///
+    ///     var numbers = [1, 2, 3]
+    ///     var byteBuffer: [UInt8] = []
+    ///     numbers.withUnsafeBytes {
+    ///         byteBuffer.append(contentsOf: $0)
+    ///     }
+    ///     // byteBuffer == [1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, ...]
+    ///
+    /// - Parameter body: A closure with an `UnsafeRawBufferPointer` parameter
+    ///   that points to the contiguous storage for the array.
+    ///    If no such storage exists, it is created. If `body` has a return value, it is used as the
+    ///   return value for the `withUnsafeBytes(_:)` method. The argument is
+    ///   valid only for the duration of the closure's execution.
+    /// - Returns: The return value of the `body` closure parameter, if any.
+    ///
+    /// - SeeAlso: `withUnsafeMutableBytes`, `UnsafeRawBufferPointer`
+    public func withUnsafeBytes<R>(_ body: (UnsafeRawBufferPointer) throws -> R) rethrows -> R
+
+    /// Removes and returns the last element of the collection.
+    ///
+    /// You can use `popLast()` to remove the last element of a collection that
+    /// might be empty. The `removeLast()` method must be used only on a
+    /// nonempty collection.
+    ///
+    /// - Returns: The last element of the collection if the collection has one
+    ///   or more elements; otherwise, `nil`.
+    ///
+    /// - Complexity: O(1).
+    /// - SeeAlso: `removeLast()`
+    public mutating func popLast() -> Element?
+
+    /// Removes and returns the last element of the collection.
+    ///
+    /// The collection must not be empty. To remove the last element of a
+    /// collection that might be empty, use the `popLast()` method instead.
+    ///
+    /// - Returns: The last element of the collection.
+    ///
+    /// - Complexity: O(1)
+    /// - SeeAlso: `popLast()`
+    public mutating func removeLast() -> Element
+
+    /// Removes the given number of elements from the end of the collection.
+    ///
+    /// - Parameter n: The number of elements to remove. `n` must be greater
+    ///   than or equal to zero, and must be less than or equal to the number of
+    ///   elements in the collection.
+    ///
+    /// - Complexity: O(1) if the collection conforms to
+    ///   `RandomAccessCollection`; otherwise, O(*n*), where *n* is the length
+    ///   of the collection.
+    public mutating func removeLast(_ n: Int)
+
+    /// Returns a subsequence containing all but the specified number of final
+    /// elements.
+    ///
+    /// If the number of elements to drop exceeds the number of elements in the
+    /// collection, the result is an empty subsequence.
+    ///
+    ///     let numbers = [1, 2, 3, 4, 5]
+    ///     print(numbers.dropLast(2))
+    ///     // Prints "[1, 2, 3]"
+    ///     print(numbers.dropLast(10))
+    ///     // Prints "[]"
+    ///
+    /// - Parameter n: The number of elements to drop off the end of the
+    ///   collection. `n` must be greater than or equal to zero.
+    /// - Returns: A subsequence that leaves off `n` elements from the end.
+    ///
+    /// - Complexity: O(*n*), where *n* is the number of elements to drop.
+    public func dropLast(_ n: Int) -> ArraySlice<Element>
+
+    /// Returns a subsequence, up to the given maximum length, containing the
+    /// final elements of the collection.
+    ///
+    /// If the maximum length exceeds the number of elements in the collection,
+    /// the result contains the entire collection.
+    ///
+    ///     let numbers = [1, 2, 3, 4, 5]
+    ///     print(numbers.suffix(2))
+    ///     // Prints "[4, 5]"
+    ///     print(numbers.suffix(10))
+    ///     // Prints "[1, 2, 3, 4, 5]"
+    ///
+    /// - Parameter maxLength: The maximum number of elements to return.
+    ///   `maxLength` must be greater than or equal to zero.
+    /// - Returns: A subsequence terminating at the end of the collection with at
+    ///   most `maxLength` elements.
+    ///
+    /// - Complexity: O(*n*), where *n* is equal to `maxLength`.
+    public func suffix(_ maxLength: Int) -> ArraySlice<Element>
+
+    /// Removes and returns the first element of the collection.
+    ///
+    /// - Returns: The first element of the collection if the collection is
+    ///   not empty; otherwise, `nil`.
+    ///
+    /// - Complexity: O(1)
+    public mutating func popFirst() -> Element?
+
+    /// Returns an array containing the results of mapping the given closure
+    /// over the sequence's elements.
+    ///
+    /// In this example, `map` is used first to convert the names in the array
+    /// to lowercase strings and then to count their characters.
+    ///
+    ///     let cast = ["Vivien", "Marlon", "Kim", "Karl"]
+    ///     let lowercaseNames = cast.map { $0.lowercaseString }
+    ///     // 'lowercaseNames' == ["vivien", "marlon", "kim", "karl"]
+    ///     let letterCounts = cast.map { $0.characters.count }
+    ///     // 'letterCounts' == [6, 6, 3, 4]
+    ///
+    /// - Parameter transform: A mapping closure. `transform` accepts an
+    ///   element of this sequence as its parameter and returns a transformed
+    ///   value of the same or of a different type.
+    /// - Returns: An array containing the transformed elements of this
+    ///   sequence.
+    public func map<T>(_ transform: (Element) throws -> T) rethrows -> [T]
+
+    /// Returns a subsequence containing all but the given number of initial
+    /// elements.
+    ///
+    /// If the number of elements to drop exceeds the number of elements in
+    /// the collection, the result is an empty subsequence.
+    ///
+    ///     let numbers = [1, 2, 3, 4, 5]
+    ///     print(numbers.dropFirst(2))
+    ///     // Prints "[3, 4, 5]"
+    ///     print(numbers.dropFirst(10))
+    ///     // Prints "[]"
+    ///
+    /// - Parameter n: The number of elements to drop from the beginning of
+    ///   the collection. `n` must be greater than or equal to zero.
+    /// - Returns: A subsequence starting after the specified number of
+    ///   elements.
+    ///
+    /// - Complexity: O(*n*), where *n* is the number of elements to drop from
+    ///   the beginning of the collection.
+    public func dropFirst(_ n: Int) -> ArraySlice<Element>
+
+    /// Returns a subsequence by skipping elements while `predicate` returns
+    /// `true` and returning the remaining elements.
+    ///
+    /// - Parameter predicate: A closure that takes an element of the
+    ///   sequence as its argument and returns `true` if the element should
+    ///   be skipped or `false` if it should be included. Once the predicate
+    ///   returns `false` it will not be called again.
+    ///
+    /// - Complexity: O(*n*), where *n* is the length of the collection.
+    public func drop(while predicate: (Element) throws -> Bool) rethrows -> ArraySlice<Element>
+
+    /// Returns a subsequence, up to the specified maximum length, containing
+    /// the initial elements of the collection.
+    ///
+    /// If the maximum length exceeds the number of elements in the collection,
+    /// the result contains all the elements in the collection.
+    ///
+    ///     let numbers = [1, 2, 3, 4, 5]
+    ///     print(numbers.prefix(2))
+    ///     // Prints "[1, 2]"
+    ///     print(numbers.prefix(10))
+    ///     // Prints "[1, 2, 3, 4, 5]"
+    ///
+    /// - Parameter maxLength: The maximum number of elements to return.
+    ///   `maxLength` must be greater than or equal to zero.
+    /// - Returns: A subsequence starting at the beginning of this collection
+    ///   with at most `maxLength` elements.
+    public func prefix(_ maxLength: Int) -> ArraySlice<Element>
+
+    /// Returns a subsequence containing the initial elements until `predicate`
+    /// returns `false` and skipping the remaining elements.
+    ///
+    /// - Parameter predicate: A closure that takes an element of the
+    ///   sequence as its argument and returns `true` if the element should
+    ///   be included or `false` if it should be excluded. Once the predicate
+    ///   returns `false` it will not be called again.
+    ///
+    /// - Complexity: O(*n*), where *n* is the length of the collection.
+    public func prefix(while predicate: (Element) throws -> Bool) rethrows -> ArraySlice<Element>
+
+    /// Returns a subsequence from the start of the collection up to, but not
+    /// including, the specified position.
+    ///
+    /// The resulting subsequence *does not include* the element at the position
+    /// `end`. The following example searches for the index of the number `40`
+    /// in an array of integers, and then prints the prefix of the array up to,
+    /// but not including, that index:
+    ///
+    ///     let numbers = [10, 20, 30, 40, 50, 60]
+    ///     if let i = numbers.index(of: 40) {
+    ///         print(numbers.prefix(upTo: i))
+    ///     }
+    ///     // Prints "[10, 20, 30]"
+    ///
+    /// Passing the collection's starting index as the `end` parameter results in
+    /// an empty subsequence.
+    ///
+    ///     print(numbers.prefix(upTo: numbers.startIndex))
+    ///     // Prints "[]"
+    ///
+    /// - Parameter end: The "past the end" index of the resulting subsequence.
+    ///   `end` must be a valid index of the collection.
+    /// - Returns: A subsequence up to, but not including, the `end` position.
+    ///
+    /// - Complexity: O(1)
+    /// - SeeAlso: `prefix(through:)`
+    public func prefix(upTo end: Int) -> ArraySlice<Element>
+
+    /// Returns a subsequence from the specified position to the end of the
+    /// collection.
+    ///
+    /// The following example searches for the index of the number `40` in an
+    /// array of integers, and then prints the suffix of the array starting at
+    /// that index:
+    ///
+    ///     let numbers = [10, 20, 30, 40, 50, 60]
+    ///     if let i = numbers.index(of: 40) {
+    ///         print(numbers.suffix(from: i))
+    ///     }
+    ///     // Prints "[40, 50, 60]"
+    ///
+    /// Passing the collection's `endIndex` as the `start` parameter results in
+    /// an empty subsequence.
+    ///
+    ///     print(numbers.suffix(from: numbers.endIndex))
+    ///     // Prints "[]"
+    ///
+    /// - Parameter start: The index at which to start the resulting subsequence.
+    ///   `start` must be a valid index of the collection.
+    /// - Returns: A subsequence starting at the `start` position.
+    ///
+    /// - Complexity: O(1)
+    public func suffix(from start: Int) -> ArraySlice<Element>
+
+    /// Returns a subsequence from the start of the collection through the
+    /// specified position.
+    ///
+    /// The resulting subsequence *includes* the element at the position `end`. 
+    /// The following example searches for the index of the number `40` in an
+    /// array of integers, and then prints the prefix of the array up to, and
+    /// including, that index:
+    ///
+    ///     let numbers = [10, 20, 30, 40, 50, 60]
+    ///     if let i = numbers.index(of: 40) {
+    ///         print(numbers.prefix(through: i))
+    ///     }
+    ///     // Prints "[10, 20, 30, 40]"
+    ///
+    /// - Parameter end: The index of the last element to include in the
+    ///   resulting subsequence. `end` must be a valid index of the collection
+    ///   that is not equal to the `endIndex` property.
+    /// - Returns: A subsequence up to, and including, the `end` position.
+    ///
+    /// - Complexity: O(1)
+    /// - SeeAlso: `prefix(upTo:)`
+    public func prefix(through position: Int) -> ArraySlice<Element>
+
+    /// Returns the longest possible subsequences of the collection, in order,
+    /// that don't contain elements satisfying the given predicate.
+    ///
+    /// The resulting array consists of at most `maxSplits + 1` subsequences.
+    /// Elements that are used to split the sequence are not returned as part of
+    /// any subsequence.
+    ///
+    /// The following examples show the effects of the `maxSplits` and
+    /// `omittingEmptySubsequences` parameters when splitting a string using a
+    /// closure that matches spaces. The first use of `split` returns each word
+    /// that was originally separated by one or more spaces.
+    ///
+    ///     let line = "BLANCHE:   I don't want realism. I want magic!"
+    ///     print(line.characters.split(whereSeparator: { $0 == " " })
+    ///                          .map(String.init))
+    ///     // Prints "["BLANCHE:", "I", "don\'t", "want", "realism.", "I", "want", "magic!"]"
+    ///
+    /// The second example passes `1` for the `maxSplits` parameter, so the
+    /// original string is split just once, into two new strings.
+    ///
+    ///     print(
+    ///         line.characters.split(
+    ///             maxSplits: 1, whereSeparator: { $0 == " " }
+    ///             ).map(String.init))
+    ///     // Prints "["BLANCHE:", "  I don\'t want realism. I want magic!"]"
+    ///
+    /// The final example passes `false` for the `omittingEmptySubsequences`
+    /// parameter, so the returned array contains empty strings where spaces
+    /// were repeated.
+    ///
+    ///     print(line.characters.split(omittingEmptySubsequences: false, whereSeparator: { $0 == " " })
+    ///                           .map(String.init))
+    ///     // Prints "["BLANCHE:", "", "", "I", "don\'t", "want", "realism.", "I", "want", "magic!"]"
+    ///
+    /// - Parameters:
+    ///   - maxSplits: The maximum number of times to split the collection, or
+    ///     one less than the number of subsequences to return. If
+    ///     `maxSplits + 1` subsequences are returned, the last one is a suffix
+    ///     of the original collection containing the remaining elements.
+    ///     `maxSplits` must be greater than or equal to zero. The default value
+    ///     is `Int.max`.
+    ///   - omittingEmptySubsequences: If `false`, an empty subsequence is
+    ///     returned in the result for each pair of consecutive elements
+    ///     satisfying the `isSeparator` predicate and for each element at the
+    ///     start or end of the collection satisfying the `isSeparator`
+    ///     predicate. The default value is `true`.
+    ///   - isSeparator: A closure that takes an element as an argument and
+    ///     returns a Boolean value indicating whether the collection should be
+    ///     split at that element.
+    /// - Returns: An array of subsequences, split from this collection's
+    ///   elements.
+    public func split(maxSplits: Int = default, omittingEmptySubsequences: Bool = default, whereSeparator isSeparator: (Element) throws -> Bool) rethrows -> [ArraySlice<Element>]
+
+    /// Removes and returns the first element of the collection.
+    ///
+    /// The collection must not be empty.
+    ///
+    /// - Returns: The first element of the collection.
+    ///
+    /// - Complexity: O(1)
+    /// - SeeAlso: `popFirst()`
+    public mutating func removeFirst() -> Element
+
+    /// Removes the specified number of elements from the beginning of the
+    /// collection.
